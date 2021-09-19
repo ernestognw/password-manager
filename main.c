@@ -24,11 +24,11 @@ void createEntry()
 
   //Obligatory field
 
-  printf("Enter your Name\n");
+  printf("Enter Entry name\n");
   scanf("%s", p);
   e->name = (char *)malloc(sizeof(p));
   strcpy(e->name, p);
-  fflush(stdin);
+ // fflush(stdin);
 
   //Obligatory field
 
@@ -36,13 +36,13 @@ void createEntry()
   scanf("%s", p);
   e->email = (char *)malloc(sizeof(p));
   strcpy(e->email, p);
-  fflush(stdin);
+ // fflush(stdin);
 
   //Obligatory field
 
   printf("Enter your password\n");
   scanf("%s", p);
-  fflush(stdin);
+ // fflush(stdin);
   e->password = (char *)malloc(sizeof(p));
   strcpy(e->password, p);
 
@@ -84,10 +84,32 @@ void listEntries()
   fp = fopen("myentries.txt", "rb");
 
   while(fread(e,sizeof(Entry),1,fp)){
-    if(!feof(fp)){
+    
+       printf("Entry Name: %s\n\n\n", e->name);
+
+    
+  }
+  fclose(fp);
+}
+
+
+  void selectedEntry(char *name){
+    Entry *e;
+    e = (Entry *)malloc(sizeof(Entry));
+    int value;
+
+    FILE *fp;
+    fp = fopen("myentries.txt", "rb");
+    while(fread(e,sizeof(Entry),1,fp)){
+         value=strcmp(e->name,name);  
+      if(value == 0){
        printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
 
-    }
+      }
+    
+  }
+  fclose(fp);
+
   }
 
   // if (fp != NULL)
@@ -100,12 +122,13 @@ void listEntries()
   //   fclose(fp);
   // }
   //printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
-}
+
 
 int main()
 {
 
   int option;
+  char *nameEntry = malloc(1024);
 
   do
   {
@@ -128,7 +151,14 @@ int main()
       break;
     case 3:
       listEntries();
+      break;
+    case 4:
+    printf("Enter entry name: \n");
+    scanf("%s", nameEntry);
+      selectedEntry(nameEntry);
     }
+    
+
 
   } while (option != 0);
 

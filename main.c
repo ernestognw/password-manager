@@ -20,7 +20,7 @@ void createEntry()
   char *p = malloc(1024);
 
   e = (Entry *)malloc(sizeof(Entry));
-  fp = fopen("myentries.txt", "wb");
+  fp = fopen("myentries.txt", "ab");
 
   //Obligatory field
 
@@ -47,16 +47,28 @@ void createEntry()
   strcpy(e->password, p);
 
   //Must fix optinal sections
-  printf("Enter a description *Optional Press Enter to skip\n");
-  fgets(p, 20, stdin);
-  //printf("Description: %s\n", p);
-  e->description = (char *)malloc(sizeof(p));
-  strcpy(e->description, p);
+  printf("Enter a description *Optional Press '0' to skip\n");
+  scanf("%s", p);
+  if(*p == '0'){
+    printf("No description added\n");
+  } else{
+    e->description = (char *)malloc(sizeof(p));
+    strcpy(e->description, p);
+  }
 
-  printf("Enter a url *Optional Press Enter to skip\n");
-  fgets(p, 20, stdin);
-  e->url = (char *)malloc(sizeof(p));
-  strcpy(e->url, p);
+  //printf("Description: %s\n", p);
+  
+
+  printf("Enter a url *Optional Press '0' to skip\n");
+  scanf("%s",p);
+  if (*p == '0'){
+    printf("No Url added\n");
+
+  } else{
+    e->url = (char *)malloc(sizeof(p));
+    strcpy(e->url, p);
+  }
+  
 
   fwrite(e, sizeof(Entry), 1, fp);
 
@@ -73,10 +85,14 @@ void listEntries()
 
   if (fp != NULL)
   {
-    fread(e, sizeof(Entry), 1, fp);
+    while(!feof(fp)){
+      fread(e, sizeof(Entry), 1, fp);
+      printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
+    }
+    
     fclose(fp);
   }
-  printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
+  //printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
 }
 
 int main()

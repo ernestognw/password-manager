@@ -118,16 +118,27 @@ void listEntries()
 
   }
 
-  // if (fp != NULL)
-  // {
-  //   while(!feof(fp)){
-  //     fread(e, sizeof(Entry), 1, fp);
-  //     printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
-  //   }
-    
-  //   fclose(fp);
-  // }
-  //printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
+ void deleteEntry(char *name){
+   Entry *e;
+   e = (Entry *)malloc(sizeof(Entry));
+   FILE *fp;
+   FILE *temp;
+   fp=fopen("myentries.bin", "rb");
+   temp=fopen("tmp.bin", "wb");
+   while (fread(e,sizeof(Entry),1,fp)) {
+		if (strcmp (e->name, name) == 0) {
+			printf("A record with requested name found and deleted.\n\n");
+			
+		} else {
+			fwrite(e, sizeof(Entry), 1, temp);
+		}
+	}
+  fclose(fp);
+	fclose(temp);
+
+	remove("myentries.bin");
+	rename("tmp.bin", "myentries.bin");
+ }
 
 
 int main()
@@ -153,14 +164,16 @@ int main()
       createEntry();
       break;
     case 2:
-      //delete()
+      printf("Enter entry name to delete: \n");
+      scanf("%s", nameEntry);
+      deleteEntry(nameEntry);
       break;
     case 3:
       listEntries();
       break;
     case 4:
-    printf("Enter entry name: \n");
-    scanf("%s", nameEntry);
+      printf("Enter entry name: \n");
+      scanf("%s", nameEntry);
       selectedEntry(nameEntry);
     }
     

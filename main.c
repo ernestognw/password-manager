@@ -83,15 +83,22 @@ void listEntries()
   FILE *fp;
   fp = fopen("myentries.txt", "rb");
 
-  if (fp != NULL)
-  {
-    while(!feof(fp)){
-      fread(e, sizeof(Entry), 1, fp);
-      printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
+  while(fread(e,sizeof(Entry),1,fp)){
+    if(!feof(fp)){
+       printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
+
     }
-    
-    fclose(fp);
   }
+
+  // if (fp != NULL)
+  // {
+  //   while(!feof(fp)){
+  //     fread(e, sizeof(Entry), 1, fp);
+  //     printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
+  //   }
+    
+  //   fclose(fp);
+  // }
   //printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
 }
 

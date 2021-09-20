@@ -2,8 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 
 //const char* ENTRY_FORMAT_OUT = "(%s,%s,%s,%s)\n";
+FILE *f;
+#define KEY 5 
 
 typedef struct Entry
 {
@@ -14,7 +17,61 @@ typedef struct Entry
   char url[20];
 } Entry;
 
+int crearPasswowrd()
+{
+    char password[15];
+    printf("Crear password:");
+    scanf("%s", password);
+   
+    f = fopen("password.bin", "wb");
+    fprintf(f, "%s", password);
+    fclose(f);
+    
+    return 0;
+}
 
+void confirmarContrasena(){
+
+    char password[15];
+    char master_password[15];
+    char entradas[1000];
+
+    //Si esto existe, quiere decir que si hay una
+    //master password
+    if (access("password.bin", F_OK) == 0)
+    {
+        //pido por esa master password
+        printf("Introducir password: ");
+        scanf("%s", password);
+        //Abro el archivo para ver ver si lo que hay dentro  == password introducida
+        f = fopen("password.bin", "rb");
+        // Lo que hay (master password FILE .bin) lo voy a  en master_password
+        fscanf(f, "%s", master_password);
+        //Tengo que cerrar el archivo
+        fclose(f);
+
+        if (strcmp(password, master_password) == 0)
+        {
+            // f = fopen("entradas.txt", "r");
+            // while (fgets(entradas, sizeof(entradas), f))
+            // {
+            //     printf("%s\n", entradas);
+           
+            // }
+        }
+        else
+        {
+            printf("Password no coincide...");
+            //esto es lo mismo que un return -1;
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        crearPasswowrd();
+    }
+
+}
 
 void createEntry()
 {
@@ -144,6 +201,7 @@ void listEntries()
 int main()
 {
 
+confirmarContrasena();
   int option;
   char *nameEntry = malloc(1024);
 

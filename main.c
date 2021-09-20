@@ -8,19 +8,26 @@
 typedef struct Entry
 {
   char name[20];
-  char email[15];
-  char password[20];
-  char description[50];
+  char email[50];
+  char password[31];
+  char description[150];
   char url[20];
 } Entry;
 
-
+char *genPassword(int passSize){
+  char *password = malloc(passSize * sizeof(char));
+  for (int i = 0; i < passSize; i++){
+    password[i] = 33 + (random() % 90);
+  }
+  return password;
+}
 
 void createEntry()
 {
   Entry *e;
   FILE *fp;
-  char *p = malloc(1024);
+  char *p = malloc(1024), *r;
+  int passSize;
 
   e = (Entry *)malloc(sizeof(Entry));
   fp = fopen("myentries.bin", "ab");
@@ -45,9 +52,18 @@ void createEntry()
 
   printf("Enter your password or press 'R' to create random password\n");
   scanf("%s", p);
+  if (*p == 'R' || *p == 'r'){
+    printf("Enter the password size (min 6, max 30)\n");
+    scanf("%d", &passSize);
+    r = genPassword(passSize);
+    strcpy(e->password, r);
+    free(r); //free password variable from genPassword
+    fflush(stdin);
+  } else{  
   //e->password = (char *)malloc(sizeof(p));
   strcpy(e->password, p);
   fflush(stdin);
+  }
 
 
   printf("Enter a description *Optional Press '0' to skip\n");
@@ -72,6 +88,7 @@ void createEntry()
   } else{
     //e->url = (char *)malloc(sizeof(p));
     strcpy(e->url, p);
+    fflush(stdin);
   }
   
 
@@ -146,6 +163,7 @@ int main()
 
   int option;
   char *nameEntry = malloc(1024);
+  srand(time(NULL));
 
   do
   {

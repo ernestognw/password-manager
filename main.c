@@ -6,7 +6,8 @@
 
 //const char* ENTRY_FORMAT_OUT = "(%s,%s,%s,%s)\n";
 FILE *f;
-#define KEY 5 
+
+
 
 typedef struct Entry
 {
@@ -26,51 +27,25 @@ int crearPasswowrd()
     f = fopen("password.bin", "wb");
     fprintf(f, "%s", password);
     fclose(f);
-    
+    system("clear");
     return 0;
 }
+void listEntries()
+{
+  Entry *e;
+  e = (Entry *)malloc(sizeof(Entry));
 
-void confirmarContrasena(){
+  FILE *fp;
+  fp = fopen("myentries.bin", "rb");
 
-    char password[15];
-    char master_password[15];
-    char entradas[1000];
 
-    //Si esto existe, quiere decir que si hay una
-    //master password
-    if (access("password.bin", F_OK) == 0)
-    {
-        //pido por esa master password
-        printf("Introducir password: ");
-        scanf("%s", password);
-        //Abro el archivo para ver ver si lo que hay dentro  == password introducida
-        f = fopen("password.bin", "rb");
-        // Lo que hay (master password FILE .bin) lo voy a  en master_password
-        fscanf(f, "%s", master_password);
-        //Tengo que cerrar el archivo
-        fclose(f);
+  while(fread(e,sizeof(Entry),1,fp)){
+    
+       printf("Entry Name: %s\n\n", e->name);
 
-        if (strcmp(password, master_password) == 0)
-        {
-            // f = fopen("entradas.txt", "r");
-            // while (fgets(entradas, sizeof(entradas), f))
-            // {
-            //     printf("%s\n", entradas);
-           
-            // }
-        }
-        else
-        {
-            printf("Password no coincide...");
-            //esto es lo mismo que un return -1;
-            exit(EXIT_FAILURE);
-        }
-    }
-    else
-    {
-        crearPasswowrd();
-    }
-
+    
+  }
+  fclose(fp);
 }
 
 void createEntry()
@@ -135,28 +110,14 @@ void createEntry()
   fwrite(e, sizeof(Entry), 1, fp);
 
   fclose(fp);
-}
-
-void listEntries()
-{
-  Entry *e;
-  e = (Entry *)malloc(sizeof(Entry));
-
-  FILE *fp;
-  fp = fopen("myentries.bin", "rb");
-
-
-  while(fread(e,sizeof(Entry),1,fp)){
-    
-       printf("Entry Name: %s\n\n", e->name);
 
     
-  }
-  fclose(fp);
 }
 
 
-  void selectedEntry(char *name){
+
+
+void selectedEntry(char *name){
     Entry *e;
     e = (Entry *)malloc(sizeof(Entry));
     int value;
@@ -174,8 +135,7 @@ void listEntries()
   fclose(fp);
 
   }
-
- void deleteEntry(char *name){
+void deleteEntry(char *name){
    Entry *e;
    e = (Entry *)malloc(sizeof(Entry));
    FILE *fp;
@@ -196,12 +156,7 @@ void listEntries()
 	remove("myentries.bin");
 	rename("tmp.bin", "myentries.bin");
  }
-
-
-int main()
-{
-
-confirmarContrasena();
+void menuEntries(){
   int option;
   char *nameEntry = malloc(1024);
 
@@ -239,5 +194,54 @@ confirmarContrasena();
 
   } while (option != 0);
 
-  return 0;
+
+}
+void confirmarContrasena(){
+
+    char password[15];
+    char master_password[15];
+    char entradas[1000];
+
+    //Si esto existe, quiere decir que si hay una
+    //master password
+    if (access("password.bin", F_OK) == 0)
+    {
+        //pido por esa master password
+        printf("Introducir password: ");
+        scanf("%s", password);
+        //Abro el archivo para ver ver si lo que hay dentro  == password introducida
+        f = fopen("password.bin", "rb");
+        // Lo que hay (master password FILE .bin) lo voy a  en master_password
+        fscanf(f, "%s", master_password);
+        //Tengo que cerrar el archivo
+        fclose(f);
+        system("clear");
+
+        if (strcmp(password, master_password) == 0)
+        {
+
+          menuEntries();
+
+        }
+        else
+        {
+            printf("Password no coincide...");
+            //esto es lo mismo que un return -1;
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        crearPasswowrd();
+    }
+
+}
+
+
+int main()
+{
+
+confirmarContrasena();
+
+  
 };

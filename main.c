@@ -6,7 +6,8 @@
 
 //const char* ENTRY_FORMAT_OUT = "(%s,%s,%s,%s)\n";
 FILE *f;
-#define KEY 5 
+
+
 
 typedef struct Entry
 {
@@ -26,7 +27,7 @@ int crearPasswowrd()
     f = fopen("password.bin", "wb");
     fprintf(f, "%s", password);
     fclose(f);
-    
+    system("clear");
     return 0;
 }
 void listEntries()
@@ -46,8 +47,6 @@ void listEntries()
   }
   fclose(fp);
 }
-
-
 
 void createEntry()
 {
@@ -111,7 +110,12 @@ void createEntry()
   fwrite(e, sizeof(Entry), 1, fp);
 
   fclose(fp);
+
+    
 }
+
+
+
 
 void selectedEntry(char *name){
     Entry *e;
@@ -211,17 +215,13 @@ void confirmarContrasena(){
         fscanf(f, "%s", master_password);
         //Tengo que cerrar el archivo
         fclose(f);
+        system("clear");
 
         if (strcmp(password, master_password) == 0)
         {
 
           menuEntries();
-            // f = fopen("entradas.txt", "r");
-            // while (fgets(entradas, sizeof(entradas), f))
-            // {
-            //     printf("%s\n", entradas);
-           
-            // }
+
         }
         else
         {

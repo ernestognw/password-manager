@@ -25,7 +25,8 @@ int crearPasswowrd()
     scanf("%s", password);
    
     f = fopen("password.bin", "wb");
-    fprintf(f, "%s", password);
+    //fprintf(f, "%s", password);
+    fwrite(password, 15, 1, f);
     fclose(f);
     system("clear");
     return 0;
@@ -212,7 +213,8 @@ void confirmarContrasena(){
         //Abro el archivo para ver ver si lo que hay dentro  == password introducida
         f = fopen("password.bin", "rb");
         // Lo que hay (master password FILE .bin) lo voy a  en master_password
-        fscanf(f, "%s", master_password);
+        //fscanf(f, "%s", master_password);
+        fread(master_password,15,1,f);
         //Tengo que cerrar el archivo
         fclose(f);
         system("clear");
@@ -243,5 +245,5 @@ int main()
 
 confirmarContrasena();
 
-  
+return 0;
 };

@@ -105,7 +105,7 @@ void createEntry()
     fflush(stdin);
   }
 
-  printf("Enter a description (Press '0' to skip): ");
+  printf("Enter a description (Press '0' to skip) *: ");
   scanf("%s", p);
   if (*p == '0')
     printf("No description added \n");
@@ -115,7 +115,7 @@ void createEntry()
     fflush(stdin);
   }
 
-  printf("Enter a URL (Press '0' to skip): ");
+  printf("Enter a URL (Press '0' to skip) *: ");
   scanf("%s", p);
   if (*p == '0')
     printf("No URL added \n");

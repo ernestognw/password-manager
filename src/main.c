@@ -242,7 +242,7 @@ void confirmarContrasena()
     }
     else
     {
-      printf("Password no coincide...");
+      printf("Password no coincide... \n");
       //esto es lo mismo que un return -1;
       exit(EXIT_FAILURE);
     }

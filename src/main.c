@@ -31,7 +31,7 @@ char *genPassword(int passSize)
 int createPassword()
 {
   char password[51];
-  printf("Crear password:");
+  printf("Crear password: ");
   scanf("%s", password);
 
   f = fopen("password.bin", "wb");
@@ -47,12 +47,17 @@ void listEntries()
   e = (Entry *)malloc(sizeof(Entry));
 
   FILE *fp;
+  if (access("myentries.bin", F_OK) != 0)
+  {
+    printf("There are no entries. \n");
+    return;
+  }
   fp = fopen("myentries.bin", "rb");
 
   while (fread(e, sizeof(Entry), 1, fp))
   {
-
-    printf("Entry Name: %s\n\n", e->name);
+    printf("=========== ENTRIES ===========\n");
+    printf("- %s\n", e->name);
   }
   fclose(fp);
 }
@@ -67,27 +72,27 @@ void createEntry()
   e = (Entry *)malloc(sizeof(Entry));
   fp = fopen("myentries.bin", "ab");
 
-  //Obligatory field
+  // Required field
 
-  printf("Enter Entry name\n");
+  printf("Name entry: ");
   scanf("%s", p);
   strcpy(e->name, p);
   fflush(stdin);
 
-  //Obligatory field
+  // Required field
 
-  printf("Enter you username/email\n");
+  printf("Username/Email: ");
   scanf("%s", p);
   strcpy(e->email, p);
   fflush(stdin);
 
-  //Obligatory field
+  // Required field
 
-  printf("Enter your password or press 'R' to create random password\n");
+  printf("Enter your password (press 'R' to create random one): ");
   scanf("%s", p);
   if (*p == 'R' || *p == 'r')
   {
-    printf("Enter the password size (min 6, max 30)\n");
+    printf("Enter the password size (min 6, max 30): ");
     scanf("%d", &passSize);
     r = genPassword(passSize);
     strcpy(e->password, r);
@@ -100,28 +105,22 @@ void createEntry()
     fflush(stdin);
   }
 
-  printf("Enter a description *Optional Press '0' to skip\n");
+  printf("Enter a description (Press '0' to skip): ");
   scanf("%s", p);
   if (*p == '0')
-  {
-    printf("No description added\n");
-  }
+    printf("No description added \n");
   else
   {
     strcpy(e->description, p);
     fflush(stdin);
   }
 
-  printf("Enter a url *Optional Press '0' to skip\n");
+  printf("Enter a URL (Press '0' to skip): ");
   scanf("%s", p);
   if (*p == '0')
-  {
-    printf("No Url added\n");
-  }
+    printf("No URL added \n");
   else
-  {
     strcpy(e->url, p);
-  }
 
   fwrite(e, sizeof(Entry), 1, fp);
 
@@ -135,13 +134,22 @@ void selectedEntry(char *name)
   int value;
 
   FILE *fp;
+  if (access("myentries.bin", F_OK) != 0)
+  {
+    printf("Specified entry does not exists. \n");
+    return;
+  }
   fp = fopen("myentries.bin", "rb");
   while (fread(e, sizeof(Entry), 1, fp))
   {
     value = strcmp(e->name, name);
     if (value == 0)
     {
-      printf("Username: %s Username/email: %s Password: %s Description: %s Url: %s \n", e->name, e->email, e->password, e->description, e->url);
+      printf("Entry: %s\n", e->name);
+      printf("Username/Email: %s\n", e->email);
+      printf("Password: %s\n", e->password);
+      printf("Description: %s\n", e->description);
+      printf("URL: %s\n", e->url);
     }
   }
   fclose(fp);
@@ -153,18 +161,19 @@ void deleteEntry(char *name)
   e = (Entry *)malloc(sizeof(Entry));
   FILE *fp;
   FILE *temp;
+  if (access("myentries.bin", F_OK) != 0)
+  {
+    printf("Specified entry does not exists. \n");
+    return;
+  }
   fp = fopen("myentries.bin", "rb");
   temp = fopen("tmp.bin", "wb");
   while (fread(e, sizeof(Entry), 1, fp))
   {
     if (strcmp(e->name, name) == 0)
-    {
       printf("A record with requested name found and deleted.\n\n");
-    }
     else
-    {
       fwrite(e, sizeof(Entry), 1, temp);
-    }
   }
   fclose(fp);
   fclose(temp);
@@ -181,13 +190,14 @@ void menuEntries()
 
   do
   {
-    printf("1.Create New Entry\n");
-    printf("2.Delete Entry\n");
-    printf("3.View all entries\n");
-    printf("4.Select an entry\n");
-    printf("0.Exit Program\n");
+    printf("=========== MENU ===========\n");
+    printf("1. Create new entry\n");
+    printf("2. Delete entry\n");
+    printf("3. View all entries\n");
+    printf("4. Select an entry\n");
+    printf("0. Exit\n\n");
 
-    printf("Enter your choice : ");
+    printf("Enter your choice: ");
     scanf("%d", &option);
 
     switch (option)
@@ -196,16 +206,19 @@ void menuEntries()
       createEntry();
       break;
     case 2:
-      printf("Enter entry name to delete: \n");
+      printf("Enter entry name to delete: ");
       scanf("%s", nameEntry);
+      printf("\n");
       deleteEntry(nameEntry);
       break;
     case 3:
+      printf("\n");
       listEntries();
       break;
     case 4:
-      printf("Enter entry name: \n");
+      printf("Enter entry name: ");
       scanf("%s", nameEntry);
+      printf("\n");
       selectedEntry(nameEntry);
     }
 
@@ -239,13 +252,16 @@ void confirmPassword()
       menuEntries();
     else
     {
-      printf("Password no coincide... \n");
+      printf("Incorrect password. Try again. \n");
       //esto es lo mismo que un return -1;
       exit(EXIT_FAILURE);
     }
   }
   else
+  {
     createPassword();
+    confirmPassword();
+  }
 }
 
 int main()

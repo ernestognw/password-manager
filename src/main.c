@@ -28,7 +28,7 @@ char *genPassword(int passSize)
 }
 
 //Create master password
-int crearPasswowrd()
+int createPassword()
 {
   char password[51];
   printf("Crear password:");
@@ -213,7 +213,7 @@ void menuEntries()
 }
 
 //Check master password inputed to stored one
-void confirmarContrasena()
+void confirmPassword()
 {
 
   char password[15];
@@ -236,10 +236,7 @@ void confirmarContrasena()
     system("clear");
 
     if (strcmp(password, master_password) == 0)
-    {
-
       menuEntries();
-    }
     else
     {
       printf("Password no coincide... \n");
@@ -248,14 +245,12 @@ void confirmarContrasena()
     }
   }
   else
-  {
-    crearPasswowrd();
-  }
+    createPassword();
 }
 
 int main()
 {
-  confirmarContrasena();
+  confirmPassword();
 
   return 0;
 };
